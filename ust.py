@@ -12,6 +12,23 @@ str_dir = np.array(["u", "d", "l", "r"])
 
 
 def ordered_scan(arr, set):
+    """
+    Revisa el arreglo arr ordenadamente hasta que encuentre un
+    elemento contenido en set
+
+    Parámetros
+    -----------
+    arr : numpy.array
+        Arreglo a escanear
+
+    set: iterable
+        Conjunto de elementos a buscar
+
+    Retorna
+    -----------
+    output
+        Primer elemento encontrado
+    """
     for i in range(len(arr)):
         if np.equal(set, arr[i]).all(axis=1).any():
             return arr[i]
@@ -176,4 +193,6 @@ class Grafo:
         return camino, direcciones
     
     def lerw(self, start):
-        return erase_loops(self.random_walk(start))
+        lerw = erase_loops(self.random_walk(start))
+
+        return lerw

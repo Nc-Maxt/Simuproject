@@ -9,16 +9,16 @@ def test_loops(path):
     else:
         print("Todo bien")
 
-
-np.random.seed(9)
-for _ in range(100):
-    grafo = Grafo()
-    visited, dirs = grafo.random_walk(np.random.randint(0, 10, 2))
-    print(visited)
-    print(dirs)
-    print("----")
-    lerw, dir = erase_loops(visited, dirs)
-    print(lerw)
-    print(dir)
-    test_loops(visited)
-    test_loops(lerw)
+if __name__ == '__main__':
+    np.random.seed(9)
+    for _ in range(100):
+        grafo = Grafo()
+        visited, dirs = grafo.random_walk(np.random.randint(0, 10, 2))
+        print(visited)
+        print(dirs)
+        print("----")
+        lerw, dir = erase_loops(visited, dirs)
+        print(lerw)
+        print(dir)
+        test_loops(visited)
+        test_loops(lerw)
