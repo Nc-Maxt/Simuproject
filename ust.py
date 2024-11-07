@@ -148,6 +148,17 @@ class Grafo:
         return vertex+direcciones[dir], dir
 
     def random_walk(self, start):
+        """
+        Metodo que genera un paseo aleatorio desde un nodo que no pertenece al
+        árbol actual
+
+        Params: 
+            start (tuple[int]): Tupla de dos elementos
+
+        Return:
+            camino(array[int]): los nodos del camino.
+            direcciones(array(int)): las direcciones en las que se mueve para recorrer el camino
+        """
         visited = []
         visited.append(start)
         dirs = []
@@ -158,7 +169,9 @@ class Grafo:
             dirs.append(dir)
             if self.grid[tuple(visited[-1])]:
                 break
-        return np.array(visited, dtype=int), np.array(dirs, dtype=str)
+        camino = np.array(visited, dtype=int)
+        direcciones = np.array(dirs, dtype=str)  
+        return camino, direcciones 
     
     def lerw(self, start):
         return erase_loops(self.random_walk(start))
