@@ -70,9 +70,11 @@ def erase_loops(visited, dirs):
         # Se copia el camino original al output hasta el inicio del loop nuevo
         loop_erased[n:ni-offset+n] = visited[offset:ni]
         new_dirs[n:ni-offset+n] = dirs[offset:ni]
-        # 
+        # Se actualiza n para que la siguiente iteración ignore el loop actual
         n += ni-offset
+        # Se actualiza la busqueda de repetidos ignorando la parte recorrida
         vals, counts = np.unique(visited[nf:], return_counts=True, axis=0)
+    # l = el resto del camino (ya no hay loops)
     l = len(visited[nf:])
     loop_erased[n:l+n] = visited[nf:]
     if nf == 0:
@@ -92,10 +94,10 @@ class Grafo:
     def __init__(self, shape=(10, 10), start=None):
         self.shape = shape
         self.grid = np.zeros(shape)
-        #En caso de que el nodo inicial haya sido elegido se le asigna 1 para decir que ya fue visitado
+        # En caso de que el nodo inicial haya sido elegido se le asigna 1 para decir que ya fue visitado
         if start is not None:
             self.grid[tuple(start)] = 1
-        #si no, se asigna uno de forma aleatoria entre todos los disponibles
+        # si no, se asigna uno de forma aleatoria entre todos los disponibles
         else:
             i = np.random.randint(0, shape[0])
             j = np.random.randint(0, shape[1])
@@ -124,9 +126,9 @@ class Grafo:
         Return:
             None
         """
-        #Verifica que sea un vertice perteneciente al grafo
+        # Verifica que sea un vertice perteneciente al grafo
         assert self.isVertex(vertex)
-        #Le cambia el valor a 1 para que sea reconocido como 1 vertice parte del arbol de raíz
+        # Le cambia el valor a 1 para que sea reconocido como 1 vertice parte del arbol de raíz
         self.grid[tuple(vertex)] = 1
 
     def random_succesor(self, vertex):
@@ -140,9 +142,9 @@ class Grafo:
             vertex: el nodo que sigue del inicial
             dir: la dirección en la cual se movió el inicial para llegar al actual
         """
-        #se elige la dirección de forma aleatoria entre las 4 posibles 
+        # se elige la dirección de forma aleatoria entre las 4 posibles
         dir = str_dir[np.random.randint(0, 4)]
-        #se generan posibles sucesores hasta tener un nodo válido 
+        # se generan posibles sucesores hasta tener un nodo válido
         while not self.isVertex(vertex+direcciones[dir]):
             dir = str_dir[np.random.randint(0, 4)]
         return vertex+direcciones[dir], dir
@@ -152,7 +154,7 @@ class Grafo:
         Metodo que genera un paseo aleatorio desde un nodo que no pertenece al
         árbol actual
 
-        Params: 
+        Params:
             start (tuple[int]): Tupla de dos elementos
 
         Return:
@@ -170,8 +172,8 @@ class Grafo:
             if self.grid[tuple(visited[-1])]:
                 break
         camino = np.array(visited, dtype=int)
-        direcciones = np.array(dirs, dtype=str)  
-        return camino, direcciones 
+        direcciones = np.array(dirs, dtype=str)
+        return camino, direcciones
     
     def lerw(self, start):
         return erase_loops(self.random_walk(start))
