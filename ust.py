@@ -161,16 +161,23 @@ class Grafo:
             camino(array[int]): los nodos del camino.
             direcciones(array(int)): las direcciones en las que se mueve para recorrer el camino
         """
-        visited = []
-        visited.append(start)
+        # se genera una lista para almacenar los elementos visitados iniciando con el nodo entregado
+        visited = [start]
+        # se genera la lista para guardar las direcciones
         dirs = []
+        # mientras no se llegue a un elemento que ya pertenece al árbol se sigue ejecutando
         while True:
+            # nodo actual es el último de la lista
             current = visited[len(visited)-1]
+            # se utiliza random_succesor para obtener el siguiente
             next, dir = self.random_succesor(current)
+            # se añade el nodo siguiente y la dirección a la lista correspondiente
             visited.append(next)
             dirs.append(dir)
+            # si se llega a uno que pertenece al arbol se rompe el ciclo
             if self.grid[tuple(visited[-1])]:
                 break
+        #se le añaden nombres a las listas
         camino = np.array(visited, dtype=int)
         direcciones = np.array(dirs, dtype=str)
         return camino, direcciones
