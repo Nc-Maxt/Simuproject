@@ -44,27 +44,68 @@ def erase_loops(visited, dirs):
         new_dirs[n:l+n-1] = dirs[nf:]
     return loop_erased[0:l+n], new_dirs[0:l+n-1]
 
-
 class Grafo:
+    """
+    Clase que representa un grafo, usada como base para realizar el algoritmo de Wilson y una implementación particular.
+
+    Args:
+        shape (tuple[int]): Dimensionalidad del grafo a generar.
+        start (int, optional): Nodo raíz inicial del grafo.
+    """
     def __init__(self, shape=(10, 10), start=None):
         self.shape = shape
         self.grid = np.zeros(shape)
+        #En caso de que el nodo inicial haya sido elegido se le asigna 1 para decir que ya fue visitado
         if start is not None:
             self.grid[tuple(start)] = 1
+        #si no, se asigna uno de forma aleatoria entre todos los disponibles
         else:
             i = np.random.randint(0, shape[0])
             j = np.random.randint(0, shape[1])
             self.grid[i, j] = 1
 
+
     def isVertex(self, vertex):
+        """
+        Método que comprueba que la tupla elegida pertenezca al grafo
+
+        Params:
+            vertex (tuple[int]): Tupla de dos elementos.
+
+        Return:
+            Boolean
+        """
         return 0 <= vertex[0] < self.shape[0] and 0 <= vertex[1] < self.shape[1]
 
     def append(self, vertex):
+        """
+        Método que agrega nodo al conjunto de los conectados a la raíz
+
+        Params: 
+            vertex (tuple[int]): Tupla de dos elementos
+
+        Return:
+            None
+        """
+        #Verifica que sea un vertice perteneciente al grafo
         assert self.isVertex(vertex)
+        #Le cambia el valor a 1 para que sea reconocido como 1 vertice parte del arbol de raíz
         self.grid[tuple(vertex)] = 1
 
     def random_succesor(self, vertex):
+        """
+        Método que genera el nodo siguiente del actual
+
+        Params: 
+            vertex (tuple[int]): Tupla de dos elementos
+
+        Return:
+            vertex: el nodo que sigue del inicial
+            dir: la dirección en la cual se movió el inicial para llegar al actual
+        """
+        #se elige la dirección de forma aleatoria entre las 4 posibles 
         dir = str_dir[np.random.randint(0, 4)]
+        #se generan posibles sucesores hasta tener un nodo válido 
         while not self.isVertex(vertex+direcciones[dir]):
             dir = str_dir[np.random.randint(0, 4)]
         return vertex+direcciones[dir], dir
