@@ -2,6 +2,14 @@ import numpy as np
 import ust
 
 
+
+def rescalate(vertexs):
+    re_vers = []
+    for i in vertexs:
+        v1 = 2*i+1
+        re_vers.append(v1)
+    return re_vers
+
 class dualgraph:
     """
     Clase que a partir de un grafo de paralelepipedo regular, 
@@ -44,4 +52,22 @@ class dualgraph:
                 self.grid[tuple(vertice)] = 1
         else:
             self.grid[tuple(vertex)] = 1
+
+        def reescalategraph(self):
+        list = self.graph.wilson()
+        count = 0
+        for i in list:
+            if (count//2) == 1:
+                # ahora deberia comenzar con el reescalamiento
+                a = len(i)
+                b = rescalate(i)
+                for j in range(0, a-1):
+                    first = b[j]
+                    second = b[j+1]
+                    prop = first + (second - first)/2
+                    self.append([first, prop, second])
+
+    def dualed(self):
+        dual = np.array(np.nonzero(1 - self.grid))
+        self.grid = dual
 
