@@ -26,7 +26,7 @@ def ordered_scan(arr, set):
 
     Retorna
     -----------
-    output
+    output :
         Primer elemento encontrado
     """
     for i in range(len(arr)):
@@ -100,6 +100,7 @@ def erase_loops(visited, dirs):
         new_dirs[n:l+n-1] = dirs[nf:]
     return loop_erased[0:l+n], new_dirs[0:l+n-1]
 
+
 class Grafo:
     """
     Clase que representa un grafo, usada como base para realizar el algoritmo de Wilson y una implementación particular.
@@ -120,7 +121,6 @@ class Grafo:
             j = np.random.randint(0, shape[1])
             self.grid[i, j] = 1
 
-
     def isVertex(self, vertex):
         """
         Método que comprueba que la tupla elegida pertenezca al grafo
@@ -137,7 +137,7 @@ class Grafo:
         """
         Método que agrega nodo al conjunto de los conectados a la raíz
 
-        Params: 
+        Params:
             vertex (tuple[int]): Tupla de dos elementos
 
         Return:
@@ -152,12 +152,13 @@ class Grafo:
         """
         Método que genera el nodo siguiente del actual
 
-        Params: 
+        Params:
             vertex (tuple[int]): Tupla de dos elementos
 
         Return:
             vertex: el nodo que sigue del inicial
-            dir: la dirección en la cual se movió el inicial para llegar al actual
+            dir: la dirección en la cual se movió el inicial para
+            llegar al actual
         """
         # se elige la dirección de forma aleatoria entre las 4 posibles
         dir = str_dir[np.random.randint(0, 4)]
@@ -176,7 +177,8 @@ class Grafo:
 
         Return:
             camino(array[int]): los nodos del camino.
-            direcciones(array(int)): las direcciones en las que se mueve para recorrer el camino
+            direcciones(array(int)): las direcciones en las que se
+            mueve para recorrer el camino
         """
         # se genera una lista para almacenar los elementos visitados iniciando con el nodo entregado
         visited = [start]
@@ -194,12 +196,8 @@ class Grafo:
             # si se llega a uno que pertenece al arbol se rompe el ciclo
             if self.grid[tuple(visited[-1])]:
                 break
-        #se le añaden nombres a las listas
+        # se le añaden nombres a las listas
         camino = np.array(visited, dtype=int)
         direcciones = np.array(dirs, dtype=str)
         return camino, direcciones
-    
-    def lerw(self, start):
-        lerw = erase_loops(self.random_walk(start))
 
-        return lerw
