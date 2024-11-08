@@ -131,7 +131,9 @@ class Grafo:
         Return:
             Boolean
         """
-        return 0 <= vertex[0] < self.shape[0] and 0 <= vertex[1] < self.shape[1]
+        if len(vertex.shape)>1:
+            return (0 <= vertex[:, 0] < self.shape[0]).all() and (0 <= vertex[:, 1] < self.shape[1]).all()
+        return (0 <= vertex[0] < self.shape[0]) and (0 <= vertex[1] < self.shape[1])
 
     def append(self, vertex):
         """
@@ -146,7 +148,11 @@ class Grafo:
         # Verifica que sea un vertice perteneciente al grafo
         assert self.isVertex(vertex)
         # Le cambia el valor a 1 para que sea reconocido como 1 vertice parte del arbol de raíz
-        self.grid[tuple(vertex)] = 1
+        if len(vertex.shape)>1:
+            for vertice in vertex:
+                self.grid[tuple(vertice)] = 1
+        else:
+            self.grid[tuple(vertex)] = 1
 
     def random_succesor(self, vertex):
         """
