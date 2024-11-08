@@ -40,10 +40,10 @@ def erase_loops(visited, dirs):
 
     Parámetros
     -----------
-    visited : numpy.array[int]
+    visited: numpy.array[int]
         Caminata como lista de vértices vecinos en el grafo
 
-    dirs :  numpy.array[str]
+    dirs:  numpy.array[str]
         Lista de direcciones tomadas en la realización del
         camino en el siguiente formato:
         'u' -> arriba
@@ -87,7 +87,7 @@ def erase_loops(visited, dirs):
         # Se copia el camino original al output hasta el inicio del loop nuevo
         loop_erased[n:ni-offset+n] = visited[offset:ni]
         new_dirs[n:ni-offset+n] = dirs[offset:ni]
-        # Se actualiza n para que la siguiente iteración ignore el loop actual
+        # Se actualizan para que la siguiente iteración ignore el loop actual
         n += ni-offset
         # Se actualiza la busqueda de repetidos ignorando la parte recorrida
         vals, counts = np.unique(visited[nf:], return_counts=True, axis=0)
@@ -199,7 +199,14 @@ class Grafo:
         direcciones = np.array(dirs, dtype=str)
         return camino, direcciones
     
-    def lerw(self, start):
-        lerw = erase_loops(self.random_walk(start))
+    def wilson(self, start):
+        paseos = []
+        while self.grid!=np.ones(self.shape):
+            out = np.nonzero(not self.grid)
+            start = np.random.choice(out)
+            cicled, dired = self.random_walk(start)
+            paseos.append(cicled)
+            nocicled = erase_loops(cicled, dired)
+            paseos.append(nocicled)
+        return paseos
 
-        return lerw
