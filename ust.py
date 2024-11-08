@@ -199,14 +199,31 @@ class Grafo:
         direcciones = np.array(dirs, dtype=str)
         return camino, direcciones
     
-    def wilson(self, start):
+    def wilson(self):
+        """
+            Genera un árbol a partir de la raíz
+
+            Retorna
+            ----------
+            paseos: numpy.array[np.array[int]]
+                Lista de paseos y caminos realizados para generar el árbol
+        """
+        # Se inicializa la lista
         paseos = []
+        # Mientras existan puntos los cuales no pertenezcan, se sigue iterando
         while self.grid!=np.ones(self.shape):
+            # Se obtienen los vértices que aún no pertenecen al árbol
             out = np.nonzero(not self.grid)
-            start = np.random.choice(out)
-            cicled, dired = self.random_walk(start)
+            # Se genera de forma uniforme un nuevo punto de partida
+            nstart = np.random.choice(out)
+            # Se realiza la primera iteración
+            cicled, dired = self.random_walk(nstart)
+            # Se agrega el paseo con loops
             paseos.append(cicled)
+            # Se le quitan los loops
             nocicled = erase_loops(cicled, dired)
+            # Se agrega el camino
             paseos.append(nocicled)
-        return paseos
+        # Se retorna
+        return np.array(paseos)
 
