@@ -1,4 +1,8 @@
 import numpy as np
+import sys
+import os.path
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from UniformTrees.ust import erase_loops, Grafo
 
 
@@ -8,6 +12,7 @@ def test_loops(path):
         print(f"Contiene loops, {np.sum(count>1)}")
     else:
         print("Todo bien")
+
 
 if __name__ == '__main__':
     np.random.seed(9)
@@ -22,3 +27,6 @@ if __name__ == '__main__':
         print(dir)
         test_loops(visited)
         test_loops(lerw)
+    grafo = Grafo()
+    grafo.wilson()
+    print(grafo.grid)

@@ -131,8 +131,8 @@ class Grafo:
         Return:
             Boolean
         """
-        if len(vertex.shape)>1:
-            return (0 <= vertex[:, 0] < self.shape[0]).all() and (0 <= vertex[:, 1] < self.shape[1]).all()
+        if len(vertex.shape) > 1:
+            return (0 <= vertex[:, 0]).all() and (vertex[:, 0] < self.shape[0]).all() and (0 <= vertex[:, 1]).all() and (vertex[:, 1] < self.shape[1]).all()
         return (0 <= vertex[0] < self.shape[0]) and (0 <= vertex[1] < self.shape[1])
 
     def append(self, vertex):
@@ -206,7 +206,7 @@ class Grafo:
         camino = np.array(visited, dtype=int)
         direcciones = np.array(dirs, dtype=str)
         return camino, direcciones
-    
+
     def wilson(self):
         """
             Genera un árbol a partir de la raíz
@@ -219,21 +219,22 @@ class Grafo:
         # Se inicializa la lista
         paseos = []
         # Mientras existan puntos los cuales no pertenezcan, se sigue iterando
-        while self.grid!=np.ones(self.shape):
+        while (self.grid != np.ones(self.shape)).any():
             # Se obtienen los vértices que aún no pertenecen al árbol
-            out = np.nonzero(not self.grid)
+            out = np.array(np.nonzero(1 - self.grid))
             # Se genera de forma uniforme un nuevo punto de partida
-            nstart = np.random.choice(out)
+            length = out.shape[1]
+            nstart = out[:, np.random.randint(0, length)]
             # Se realiza la primera iteración
             cicled, dired = self.random_walk(nstart)
             # Se agrega el paseo con loops
             paseos.append(cicled)
             # Se le quitan los loops
-            nocicled = erase_loops(cicled, dired)
+            nocicled = erase_loops(cicled, dired)[0]
             # Se añade sin ciclo al grid
             self.append(nocicled)
             # Se agrega el camino
             paseos.append(nocicled)
         # Se retorna
-        return np.array(paseos)
+        return paseos
 
