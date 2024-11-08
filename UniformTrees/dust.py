@@ -2,7 +2,6 @@ import numpy as np
 import ust
 
 
-
 def rescalate(vertexs):
     re_vers = []
     for i in vertexs:
@@ -10,7 +9,8 @@ def rescalate(vertexs):
         re_vers.append(v1)
     return re_vers
 
-class dualgraph:
+
+class Dualgraph:
     """
     Clase que a partir de un grafo de paralelepipedo regular, 
     genera una base para hacer el dual.
@@ -53,7 +53,7 @@ class dualgraph:
         else:
             self.grid[tuple(vertex)] = 1
 
-        def reescalategraph(self):
+    def reescalategraph(self):
         list = self.graph.wilson()
         count = 0
         for i in list:
@@ -70,4 +70,3 @@ class dualgraph:
     def dualed(self):
         dual = np.array(np.nonzero(1 - self.grid))
         self.grid = dual
-
