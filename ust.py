@@ -40,10 +40,10 @@ def erase_loops(visited, dirs):
 
     Parámetros
     -----------
-    visited : numpy.array[int]
+    visited: numpy.array[int]
         Caminata como lista de vértices vecinos en el grafo
 
-    dirs :  numpy.array[str]
+    dirs:  numpy.array[str]
         Lista de direcciones tomadas en la realización del
         camino en el siguiente formato:
         'u' -> arriba
@@ -87,7 +87,7 @@ def erase_loops(visited, dirs):
         # Se copia el camino original al output hasta el inicio del loop nuevo
         loop_erased[n:ni-offset+n] = visited[offset:ni]
         new_dirs[n:ni-offset+n] = dirs[offset:ni]
-        # Se actualiza n para que la siguiente iteración ignore el loop actual
+        # Se actualizan para que la siguiente iteración ignore el loop actual
         n += ni-offset
         # Se actualiza la busqueda de repetidos ignorando la parte recorrida
         vals, counts = np.unique(visited[nf:], return_counts=True, axis=0)
@@ -200,4 +200,35 @@ class Grafo:
         camino = np.array(visited, dtype=int)
         direcciones = np.array(dirs, dtype=str)
         return camino, direcciones
+<<<<<<< HEAD
+=======
+    
+    def wilson(self):
+        """
+            Genera un árbol a partir de la raíz
+
+            Retorna
+            ----------
+            paseos: numpy.array[np.array[int]]
+                Lista de paseos y caminos realizados para generar el árbol
+        """
+        # Se inicializa la lista
+        paseos = []
+        # Mientras existan puntos los cuales no pertenezcan, se sigue iterando
+        while self.grid!=np.ones(self.shape):
+            # Se obtienen los vértices que aún no pertenecen al árbol
+            out = np.nonzero(not self.grid)
+            # Se genera de forma uniforme un nuevo punto de partida
+            nstart = np.random.choice(out)
+            # Se realiza la primera iteración
+            cicled, dired = self.random_walk(nstart)
+            # Se agrega el paseo con loops
+            paseos.append(cicled)
+            # Se le quitan los loops
+            nocicled = erase_loops(cicled, dired)
+            # Se agrega el camino
+            paseos.append(nocicled)
+        # Se retorna
+        return np.array(paseos)
+>>>>>>> 260fd8916c20b4236010c748c192ed5e4a2b49b0
 
