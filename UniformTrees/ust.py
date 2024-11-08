@@ -103,16 +103,18 @@ def erase_loops(visited, dirs):
 
 class Grafo:
     """
-    Clase que representa un grafo, usada como base para realizar el algoritmo de Wilson y una implementación particular.
+    Clase que representa un grafo, usada como base para realizar el algoritmo
+    de Wilson y una implementación particular.
 
-    Args:
+    Params:
         shape (tuple[int]): Dimensionalidad del grafo a generar.
         start (int, optional): Nodo raíz inicial del grafo.
     """
     def __init__(self, shape=(10, 10), start=None):
         self.shape = shape
         self.grid = np.zeros(shape)
-        # En caso de que el nodo inicial haya sido elegido se le asigna 1 para decir que ya fue visitado
+        # En caso de que el nodo inicial haya sido elegido
+        # se le aigna valor 1 para decir que ya fue visitado
         if start is not None:
             self.grid[tuple(start)] = 1
         # si no, se asigna uno de forma aleatoria entre todos los disponibles
@@ -132,8 +134,14 @@ class Grafo:
             Boolean
         """
         if len(vertex.shape) > 1:
-            return (0 <= vertex[:, 0]).all() and (vertex[:, 0] < self.shape[0]).all() and (0 <= vertex[:, 1]).all() and (vertex[:, 1] < self.shape[1]).all()
-        return (0 <= vertex[0] < self.shape[0]) and (0 <= vertex[1] < self.shape[1])
+            a = (0 <= vertex[:, 0]).all()
+            b = (vertex[:, 0] < self.shape[0]).all()
+            c = (0 <= vertex[:, 1]).all()
+            d = (vertex[:, 1] < self.shape[1]).all()
+            return a and b and c and d
+        c = (0 <= vertex[0] < self.shape[0])
+        d = (0 <= vertex[1] < self.shape[1])
+        return c and d
 
     def append(self, vertex):
         """
@@ -147,8 +155,9 @@ class Grafo:
         """
         # Verifica que sea un vertice perteneciente al grafo
         assert self.isVertex(vertex)
-        # Le cambia el valor a 1 para que sea reconocido como 1 vertice parte del arbol de raíz
-        if len(vertex.shape)>1:
+        # Le cambia el valor a 1 para que sea reconocido como
+        # un vertice parte del arbol de raíz
+        if len(vertex.shape) > 1:
             for vertice in vertex:
                 self.grid[tuple(vertice)] = 1
         else:
@@ -186,17 +195,20 @@ class Grafo:
             direcciones(array(int)): las direcciones en las que se
             mueve para recorrer el camino
         """
-        # se genera una lista para almacenar los elementos visitados iniciando con el nodo entregado
+        # se genera una lista para almacenar los elementos visitados
+        # iniciando con el nodo entregado
         visited = [start]
         # se genera la lista para guardar las direcciones
         dirs = []
-        # mientras no se llegue a un elemento que ya pertenece al árbol se sigue ejecutando
+        # mientras no se llegue a un elemento que ya pertenece al árbol
+        # se sigue ejecutando
         while True:
             # nodo actual es el último de la lista
             current = visited[len(visited)-1]
             # se utiliza random_succesor para obtener el siguiente
             next, dir = self.random_succesor(current)
-            # se añade el nodo siguiente y la dirección a la lista correspondiente
+            # se añade el nodo siguiente y
+            # la dirección a la lista correspondiente
             visited.append(next)
             dirs.append(dir)
             # si se llega a uno que pertenece al arbol se rompe el ciclo
@@ -237,4 +249,3 @@ class Grafo:
             paseos.append(nocicled)
         # Se retorna
         return paseos
-
