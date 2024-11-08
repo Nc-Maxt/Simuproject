@@ -200,8 +200,6 @@ class Grafo:
         camino = np.array(visited, dtype=int)
         direcciones = np.array(dirs, dtype=str)
         return camino, direcciones
-<<<<<<< HEAD
-=======
     
     def wilson(self):
         """
@@ -230,5 +228,4 @@ class Grafo:
             paseos.append(nocicled)
         # Se retorna
         return np.array(paseos)
->>>>>>> 260fd8916c20b4236010c748c192ed5e4a2b49b0
 
