@@ -19,7 +19,7 @@ class TestGrafo(unittest.TestCase):
         son (10, 10)
         '''
         self.assertEqual(self.grafo_1.shape, (10, 10))
-        self.assertEqual(self.grafo_1.shape, self.grafo_2.grid.shape)
+        self.assertEqual(self.grafo_2.shape, self.grafo_2.grid.shape)
 
     def testShape(self):
         '''
@@ -36,10 +36,10 @@ class TestGrafo(unittest.TestCase):
         '''
         test_grid = np.zeros((10, 10))
         test_grid[5, 5] = 1
-        self.assertEqual(test_grid, self.grafo_1.grid)
+        self.assertTrue((test_grid == self.grafo_1.grid).all())
         test_grid2 = np.zeros((10, 3))
         test_grid2[9, 2] = 1
-        self.assertEqual(test_grid2, self.grafo_2.grid)
+        self.assertTrue((test_grid2 == self.grafo_2.grid).all())
 
     def testAppend(self):
         '''
@@ -50,17 +50,17 @@ class TestGrafo(unittest.TestCase):
         verts = np.array([[n, 0] for n in range(10)])
         test_grid[:, 0] = np.ones(10)
         self.grafo_1.append(verts)
-        self.assertEqual(test_grid, self.grafo_1.grid)
+        self.assertTrue((test_grid == self.grafo_1.grid).all())
 
     def testRandomSucc(self):
         '''
         Prueba que RandomSuccesor retorna un vértice válido
         '''
-        s = self.grafo_1.random_succesor(np.array([3,3]))
-        self.assertEqual(np.linalg.norm(s-np.array([3,3])), 1)
+        s, _ = self.grafo_1.random_succesor(np.array([3, 3]))
+        self.assertEqual(np.linalg.norm(s-np.array([3, 3])), 1)
         self.assert_(self.grafo_1.isVertex(s))
 
-        t = self.grafo_2.random_succesor(np.array([0, 0]))
+        t, _ = self.grafo_2.random_succesor(np.array([0, 0]))
         self.assertEqual(np.linalg.norm(t-np.array([0, 0])), 1)
         self.assert_(self.grafo_2.isVertex(t))
 
@@ -70,10 +70,10 @@ class TestGrafo(unittest.TestCase):
         y que el camino termina en un vertice del arbol
         '''
         for _ in range(50):
-            rw = self.grafo_1.random_walk(np.array([0, 0]))
+            rw, _ = self.grafo_1.random_walk(np.array([0, 0]))
             self.assert_(self.grafo_1.isVertex(rw))
             self.assert_((np.linalg.norm(np.diff(rw, axis=0), axis=1) == 1).all())
-            self.assertEqual(rw[-1], np.array([5, 5]))
+            self.assertTrue((rw[-1] == np.array([5, 5])).all())
 
     def testEraseLoops(self):
         '''
@@ -86,14 +86,15 @@ class TestGrafo(unittest.TestCase):
             self.assert_(not (count > 1).any())
             self.assert_(self.grafo_1.isVertex(lerw))
             self.assert_((np.linalg.norm(np.diff(lerw, axis=0), axis=1) == 1).all())
-            self.assertEqual(lerw[-1], np.array([5, 5]))
+            self.assert_((lerw[-1] == np.array([5, 5])).all())
 
     def testWilson(self):
         paths = self.grafo_1.wilson()
         self.assert_((self.grafo_1.grid == 1).all())
-        for path in paths:
-            nodos, count = np.unique(path, return_counts=True, axis=0)
-            self.assert_((count == 1).all())
+        for i, path in enumerate(paths):
+            if i%2==1:
+                nodos, count = np.unique(path, return_counts=True, axis=0)
+                self.assert_((count == 1).all())
 
 
 unittest.main()

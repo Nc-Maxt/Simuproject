@@ -133,15 +133,18 @@ class Grafo:
         Return:
             Boolean
         """
-        if len(vertex.shape) > 1:
-            a = (0 <= vertex[:, 0]).all()
-            b = (vertex[:, 0] < self.shape[0]).all()
-            c = (0 <= vertex[:, 1]).all()
-            d = (vertex[:, 1] < self.shape[1]).all()
-            return a and b and c and d
-        c = (0 <= vertex[0] < self.shape[0])
-        d = (0 <= vertex[1] < self.shape[1])
-        return c and d
+        if isinstance(vertex, np.ndarray):
+            if len(vertex.shape) > 1:
+                a = (0 <= vertex[:, 0]).all()
+                b = (vertex[:, 0] < self.shape[0]).all()
+                c = (0 <= vertex[:, 1]).all()
+                d = (vertex[:, 1] < self.shape[1]).all()
+                return a and b and c and d
+        a = (0 <= vertex[0])
+        b = vertex[0] < self.shape[0]
+        c = (0 <= vertex[1])
+        d = (vertex[1] < self.shape[1])
+        return a and b and c and d
 
     def append(self, vertex):
         """
