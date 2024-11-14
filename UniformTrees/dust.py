@@ -2,7 +2,6 @@ import numpy as np
 import ust
 
 
-
 def rescalate(vertexs):
     re_vers = []
     for i in vertexs:
@@ -10,9 +9,10 @@ def rescalate(vertexs):
         re_vers.append(v1)
     return re_vers
 
+
 class dualgraph:
     """
-    Clase que a partir de un grafo de paralelepipedo regular, 
+    Clase que a partir de un grafo de paralelepipedo regular,
     genera una base para hacer el dual.
 
     Params:
@@ -46,14 +46,15 @@ class dualgraph:
         """
         # Verifica que sea un vertice perteneciente al grafo
         assert self.isVertex(vertex)
-        # Le cambia el valor a 1 para que sea reconocido como 1 vertice parte del arbol de raíz
+        # Le cambia el valor a 1 para que sea reconocido como 1 vertice parte
+        # del arbol de raíz
         if len(vertex.shape) > 1:
             for vertice in vertex:
                 self.grid[tuple(vertice)] = 1
         else:
             self.grid[tuple(vertex)] = 1
 
-        def reescalategraph(self):
+    def reescalategraph(self):
         list = self.graph.wilson()
         count = 0
         for i in list:
@@ -70,4 +71,3 @@ class dualgraph:
     def dualed(self):
         dual = np.array(np.nonzero(1 - self.grid))
         self.grid = dual
-

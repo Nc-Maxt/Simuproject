@@ -116,12 +116,17 @@ class Grafo:
         # En caso de que el nodo inicial haya sido elegido
         # se le aigna valor 1 para decir que ya fue visitado
         if start is not None:
+            self.st = start
             self.grid[tuple(start)] = 1
         # si no, se asigna uno de forma aleatoria entre todos los disponibles
         else:
             i = np.random.randint(0, shape[0])
             j = np.random.randint(0, shape[1])
+            self.st = [i, j]
             self.grid[i, j] = 1
+
+    def get_start(self):
+        return self.st
 
     def isVertex(self, vertex):
         """
