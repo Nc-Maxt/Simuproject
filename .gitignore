@@ -3,6 +3,6 @@
 
 # Ignore all __pycache__ folders in any location
 **/__pycache__/
-
+**/__init__.py
 # Ignore python venv environment
 venv/
