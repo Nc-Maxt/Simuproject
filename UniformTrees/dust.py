@@ -1,5 +1,5 @@
 import numpy as np
-import ust
+from . import ust
 
 
 def rescalate(vertexs):
@@ -31,7 +31,7 @@ class Dualgraph:
         fil, col = shape
         # Se genera el grafo que permita recorrer los elementos
         self.shape = (2*fil+1, 2*col+1)
-        self.grid = np.zeros(2*fil+1, 2*col+1)
+        self.grid = np.zeros((2*fil+1, 2*col+1))
         self.graph = g
 
     def append(self, vertex):
