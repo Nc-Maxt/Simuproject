@@ -5,7 +5,7 @@ import ust
 def rescalate(vertexs):
     re_vers = []
     for i in vertexs:
-        v1 = 2*i+1
+        v1 = 4*i+2
         re_vers.append(v1)
     return re_vers
 
@@ -30,9 +30,10 @@ class dualgraph:
         g = ust.Grafo(shape, start)
         fil, col = shape
         # Se genera el grafo que permita recorrer los elementos
-        self.shape = (2*fil+1, 2*col+1)
-        self.grid = np.zeros(2*fil+1, 2*col+1)
+        self.shape = (4*fil+1, 4*col+1)
+        self.grid = np.zeros(4*fil+1, 4*col+1)
         self.graph = g
+        self.actives = []
 
     def append(self, vertex):
         """
@@ -58,16 +59,25 @@ class dualgraph:
         list = self.graph.wilson()
         count = 0
         for i in list:
+            # los pares son los que tienen caminos (no hay ciclos)
             if (count//2) == 1:
-                # ahora deberia comenzar con el reescalamiento
+                # ahora comienza con el reescalamiento
                 a = len(i)
                 b = rescalate(i)
                 for j in range(0, a-1):
                     first = b[j]
-                    second = b[j+1]
-                    prop = first + (second - first)/2
-                    self.append([first, prop, second])
+                    fourth = b[j+1]
+                    movs = (fourth - first)/4
+                    second = first + movs
+                    third = first + 2*movs
 
+                    self.actives.append(first)
+                    self.actives.append(second)
+                    self.actives.append(third)
+                    self.append([first, second, third])
+
+    """
     def dualed(self):
         dual = np.array(np.nonzero(1 - self.grid))
         self.grid = dual
+    """
