@@ -15,16 +15,17 @@ class dualgraph:
     Clase que a partir de un grafo de paralelepipedo regular,
     genera una base para hacer el dual.
 
-    Params:
+    Attributes:
         shape (tuple[int]): Dimensionalidad del grafo base a generar.
-        start (int, optional): Nodo raíz inicial del grafo para hacer el arbol.
+        grid (np.array(boolean)): Malla usada como la base
+        graph (Grafo): Grafo base.
+
     """
     def __init__(self, shape, start=None):
         """
         Attributes:
             shape (tuple(int)): Dimensionalidad del grafo dual.
-            grid (np.array(boolean)): Malla usada como la base
-            graph (Grafo): Grafo base.
+            start (int, optional): Nodo razo para hacer el arbol.
         """
         # Se genera el grafo original
         g = ust.Grafo(shape, start)
@@ -55,10 +56,13 @@ class dualgraph:
         else:
             self.grid[tuple(vertex)] = 1
 
+    def isVertex(self, vertex):
+        return 0
+
     def reescalategraph(self):
-        list = self.graph.wilson()
+        paths = self.graph.wilson()
         count = 0
-        for i in list:
+        for i in paths:
             # los pares son los que tienen caminos (no hay ciclos)
             if (count//2) == 1:
                 # ahora comienza con el reescalamiento
