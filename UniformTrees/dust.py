@@ -100,7 +100,6 @@ class Dualgraph:
                     self.actives.append(third)
                     self.append([first, second, third])
 
-
     def adyacent(self, path):
         adjacent_vertices = []
         directions = [
