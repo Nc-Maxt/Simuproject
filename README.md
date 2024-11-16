@@ -9,8 +9,8 @@ Etapas:
 Item I: Animación y comprobación
 
 1) verificar wilson en ejecucion (done)
-2) hacer una animacion de wilson
-3) modificar los colores de los looped y los sin loop para mayor contraste
+2) hacer una animacion de wilson (done)
+3) modificar los colores de los looped y los sin loop para mayor contraste (done)
 
 Item II: LSE8
 
