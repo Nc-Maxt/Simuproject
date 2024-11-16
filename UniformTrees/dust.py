@@ -111,30 +111,24 @@ class Dualgraph:
             self.append(i)
 
     def adyacent(self, path):
-        adjacent_vertices = []
-        directions = [
-            np.array([1, 0]),
-            np.array([-1, 0]),
-            np.array([0, 1]),
-            np.array([0, -1]),
-            np.array([1, 1]),
-            np.array([1, -1]),
-            np.array([-1, 1]),
-            np.array([-1, -1]),
-        ]
-        if isinstance(path, np.ndarray):
-            if len(path.shape) > 1:
-                for vertex in path:
-                    for direction in directions:
-                        neighbor = vertex + direction
-                        if self.isVertex(neighbor):
-                            adjacent_vertices.append(neighbor)
+        directions = np.array([
+            [1, 0],
+            [-1, 0],
+            [0, 1],
+            [0, -1],
+            [1, 1],
+            [1, -1],
+            [-1, 1],
+            [-1, -1],
+        ])
+        if isinstance(path, np.ndarray) and len(path.shape) > 1:
+            neighbors = path[:, np.newaxis, :] + directions
+            neighbors = neighbors.reshape(-1, 2)
         else:
-            for direction in directions:
-                neighbor = vertex + direction
-                if self.isVertex(neighbor):
-                    adjacent_vertices.append(neighbor)
-        return np.unique(adjacent_vertices, axis=0)
+            neighbors = path + directions
+
+        valid_neighbors = neighbors[np.apply_along_axis(self.isVertex, 1, neighbors)]
+        return np.unique(valid_neighbors, axis=0)
 
     def dualed(self):
         dual = np.array(np.nonzero(1 - self.grid))
