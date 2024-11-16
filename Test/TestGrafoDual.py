@@ -28,4 +28,7 @@ class TestGrafoDual(unittest.TestCase):
         self.assertTrue((self.d_1.graph.grid == 1).all())
         self.d_2.reescalategraph()
         self.assertTrue((self.d_2.graph.grid == 1).all())
-        
+
+
+if __name__ == "__main__":
+    unittest.main()
