@@ -43,7 +43,8 @@ class TestGrafoDual(unittest.TestCase):
             [-1, 1],
             [-1, -1],
         ]) + 1
-        np.testing.assert_array_equal(np.sort(result, axis=0), np.sort(expected, axis=0))
+        np.testing.assert_array_equal(np.sort(result, axis=0),
+                                      np.sort(expected, axis=0))
 
         # Se prueba que funcione para un camino de mas de un vértice
         path = np.array([[0, 0], [1, 1]])
@@ -55,7 +56,8 @@ class TestGrafoDual(unittest.TestCase):
             [2, 2], [2, 0], [0, 2], [0, 0],
         ])
         expected = np.unique(expected, axis=0)
-        np.testing.assert_array_equal(np.sort(result, axis=0), np.sort(expected, axis=0))
+        np.testing.assert_array_equal(np.sort(result, axis=0),
+                                      np.sort(expected, axis=0))
 
 
 if __name__ == "__main__":
