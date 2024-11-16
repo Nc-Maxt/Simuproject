@@ -29,6 +29,34 @@ class TestGrafoDual(unittest.TestCase):
     #     self.d_2.reescalategraph()
     #     self.assertTrue((self.d_2.graph.grid == 1).all())
 
+    def testAdjacent(self):
+        # Caso con un vértice
+        path = np.array([1, 1])
+        result = self.d_1.adyacent(path)
+        expected = np.array([
+            [1, 0],
+            [-1, 0],
+            [0, 1],
+            [0, -1],
+            [1, 1],
+            [1, -1],
+            [-1, 1],
+            [-1, -1],
+        ]) + 1
+        np.testing.assert_array_equal(np.sort(result, axis=0), np.sort(expected, axis=0))
+
+        # Se prueba que funcione para un camino de mas de un vértice
+        path = np.array([[0, 0], [1, 1]])
+        result = self.d_1.adyacent(path)
+        expected = np.array([
+            [1, 0], [0, 1],  # Neighbors of [0, 0]
+            [2, 1], [0, 1], [1, 2], [1, 0],    # Neighbors of [1, 1]
+            [1, 1],
+            [2, 2], [2, 0], [0, 2], [0, 0],
+        ])
+        expected = np.unique(expected, axis=0)
+        np.testing.assert_array_equal(np.sort(result, axis=0), np.sort(expected, axis=0))
+
 
 if __name__ == "__main__":
     unittest.main()
