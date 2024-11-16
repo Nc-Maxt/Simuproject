@@ -64,7 +64,6 @@ class Dualgraph:
         else:
             self.grid[tuple([np.abs(-vertex[0]+self.shape[0]-1), vertex[1]])] = 1
 
-
     def isVertex(self, vertex):
         """
         Método que comprueba que la tupla elegida pertenezca al grafo
@@ -108,7 +107,6 @@ class Dualgraph:
                 if j == a-2:
                     self.actives.append(fifth)
                 
-    
     def gridact(self):
         for i in self.actives:
             self.append(i)
@@ -139,33 +137,6 @@ class Dualgraph:
                     adjacent_vertices.append(neighbor)
         return np.unique(adjacent_vertices, axis=0)
 
-    def adyacent(self, path):
-        adjacent_vertices = []
-        directions = [
-            np.array([1, 0]),
-            np.array([-1, 0]),
-            np.array([0, 1]),
-            np.array([0, -1]),
-            np.array([1, 1]),
-            np.array([1, -1]),
-            np.array([-1, 1]),
-            np.array([-1, -1]),
-        ]
-        if isinstance(path, np.ndarray):
-            if len(path.shape) > 1:
-                for vertex in path:
-                    for direction in directions:
-                        neighbor = vertex + direction
-                        if self.isVertex(neighbor):
-                            adjacent_vertices.append(neighbor)
-        else:
-            for direction in directions:
-                neighbor = vertex + direction
-                if self.isVertex(neighbor):
-                    adjacent_vertices.append(neighbor)
-        return np.unique(adjacent_vertices, axis=0)
-
-    """
     def dualed(self):
         dual = np.array(np.nonzero(1 - self.grid))
         self.grid = dual
