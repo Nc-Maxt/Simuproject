@@ -59,10 +59,9 @@ class Dualgraph:
         # Le cambia el valor a 1 para que sea reconocido como 1 vertice parte
         # del arbol de raíz
         if len(vertex.shape) > 1:
-            for vertice in vertex:
-                self.grid[tuple([np.abs(-vertice[0]+self.shape[0]-1), vertice[1]])] = 1
+            self.grid[vertex[:, 0], vertex[:, 1]] = 1
         else:
-            self.grid[tuple([np.abs(-vertex[0]+self.shape[0]-1), vertex[1]])] = 1
+            self.grid[vertex[0], vertex[1]] = 1
 
     def isVertex(self, vertex):
         """
@@ -140,4 +139,3 @@ class Dualgraph:
     def dualed(self):
         dual = np.array(np.nonzero(1 - self.grid))
         self.grid = dual
-    """

@@ -166,8 +166,9 @@ class Grafo:
         # Le cambia el valor a 1 para que sea reconocido como
         # un vertice parte del arbol de raíz
         if len(vertex.shape) > 1:
-            for vertice in vertex:
-                self.grid[tuple(vertice)] = 1
+            # for vertice in vertex:
+            #     self.grid[tuple(vertice)] = 1
+            self.grid[vertex[:, 0], vertex[:, 1]] = 1
         else:
             self.grid[tuple(vertex)] = 1
 
