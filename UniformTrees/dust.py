@@ -130,6 +130,9 @@ class Dualgraph:
         valid_neighbors = neighbors[np.apply_along_axis(self.isVertex, 1, neighbors)]
         return np.unique(valid_neighbors, axis=0)
 
-    def dualed(self):
-        dual = np.array(np.nonzero(1 - self.grid))
-        self.grid = dual
+    def dual(self):
+        adj = self.adyacent(np.array(self.actives))
+        M = np.zeros(self.shape)
+        M[adj[:, 0], adj[:, 1]] = 1
+        M = 1 - M
+        return M
