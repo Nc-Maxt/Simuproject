@@ -1,5 +1,5 @@
 import numpy as np
-import ust
+from . import ust
 
 
 def rescalate(vertexs):
@@ -32,9 +32,16 @@ class dualgraph:
         fil, col = shape
         # Se genera el grafo que permita recorrer los elementos
         self.shape = (4*fil+1, 4*col+1)
-        self.grid = np.zeros(4*fil+1, 4*col+1)
+        self.grid = np.zeros((4*fil+1, 4*col+1))
         self.graph = g
         self.actives = []
+        self.path = []
+
+    def wilson(self):
+        s = self.graph.wilson()
+        for i in range(len(s)):
+            if i%2 == 1:
+                self.path.append(s[i])
 
     def append(self, vertex):
         """
@@ -47,39 +54,64 @@ class dualgraph:
             None
         """
         # Verifica que sea un vertice perteneciente al grafo
+        
         assert self.isVertex(vertex)
         # Le cambia el valor a 1 para que sea reconocido como 1 vertice parte
         # del arbol de raíz
         if len(vertex.shape) > 1:
             for vertice in vertex:
-                self.grid[tuple(vertice)] = 1
+                self.grid[tuple([np.abs(-vertice[0]+self.shape[0]-1), np.abs(vertice[1]-self.shape[1]+1)])] = 1
         else:
-            self.grid[tuple(vertex)] = 1
+            self.grid[tuple([np.abs(-vertex[0]+self.shape[0]-1), np.abs(vertex[1]-self.shape[1]+1)])] = 1
+
 
     def isVertex(self, vertex):
-        return 0
+        """
+        Método que comprueba que la tupla elegida pertenezca al grafo
 
-    def reescalategraph(self):
-        paths = self.graph.wilson()
-        count = 0
+        Params:
+            vertex (tuple[int]): Tupla de dos elementos.
+
+        Return:
+            Boolean
+        """
+        if isinstance(vertex, np.ndarray):
+            if len(vertex.shape) > 1:
+                a = (0 <= vertex[:, 0]).all()
+                b = (vertex[:, 0] < self.shape[0]).all()
+                c = (0 <= vertex[:, 1]).all()
+                d = (vertex[:, 1] < self.shape[1]).all()
+                return a and b and c and d
+        a = (0 <= vertex[0])
+        b = vertex[0] < self.shape[0]
+        c = (0 <= vertex[1])
+        d = (vertex[1] < self.shape[1])
+        return a and b and c and d
+
+    def scalate(self):
+        paths = self.path
         for i in paths:
-            # los pares son los que tienen caminos (no hay ciclos)
-            if (count//2) == 1:
-                # ahora comienza con el reescalamiento
-                a = len(i)
-                b = rescalate(i)
-                for j in range(0, a-1):
-                    first = b[j]
-                    fourth = b[j+1]
-                    movs = (fourth - first)/4
-                    second = first + movs
-                    third = first + 2*movs
-
-                    self.actives.append(first)
-                    self.actives.append(second)
-                    self.actives.append(third)
-                    self.append([first, second, third])
-            count += 1
+            # ahora comienza con el reescalamiento
+            a = len(i)
+            b = rescalate(i)
+            for j in range(0, a-1):
+                first = b[j]
+                fifth = b[j+1]
+                movs = np.array((fifth - first)/4, dtype=int)
+                second = np.array(first + movs, dtype=int)
+                third = np.array(first + 2*movs, dtype=int)
+                fourth = np.array(first + 3*movs, dtype=int)
+                self.actives.append(first)
+                self.actives.append(second)
+                self.actives.append(third)
+                self.actives.append(fourth)
+                if j == a-2:
+                    self.actives.append(fifth)
+                
+    
+    def gridact(self):
+        for i in self.actives:
+            self.append(i)
 
     """
     def dualed(self):
