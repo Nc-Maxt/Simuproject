@@ -1,8 +1,8 @@
 import numpy as np
 import sys
-import os.path
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
+import os
+# Add the correct path to the sys.path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from UniformTrees.ust import erase_loops, Grafo
 import unittest
 
@@ -92,7 +92,7 @@ class TestGrafo(unittest.TestCase):
         paths = self.grafo_1.wilson()
         self.assert_((self.grafo_1.grid == 1).all())
         for i, path in enumerate(paths):
-            if i%2==1:
+            if i % 2 == 1:
                 nodos, count = np.unique(path, return_counts=True, axis=0)
                 self.assert_((count == 1).all())
 
