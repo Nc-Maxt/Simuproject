@@ -10,7 +10,7 @@ def rescalate(vertexs):
     return re_vers
 
 
-class dualgraph:
+class Dualgraph:
     """
     Clase que a partir de un grafo de paralelepipedo regular,
     genera una base para hacer el dual.
@@ -32,7 +32,7 @@ class dualgraph:
         fil, col = shape
         # Se genera el grafo que permita recorrer los elementos
         self.shape = (4*fil+1, 4*col+1)
-        self.grid = np.zeros(4*fil+1, 4*col+1)
+        self.grid = np.zeros((4*fil+1, 4*col+1))
         self.graph = g
         self.actives = []
 
@@ -57,7 +57,27 @@ class dualgraph:
             self.grid[tuple(vertex)] = 1
 
     def isVertex(self, vertex):
-        return 0
+        """
+        Método que comprueba que la tupla elegida pertenezca al grafo
+
+        Params:
+            vertex (tuple[int]): Tupla de dos elementos.
+
+        Return:
+            Boolean
+        """
+        if isinstance(vertex, np.ndarray):
+            if len(vertex.shape) > 1:
+                a = (0 <= vertex[:, 0]).all()
+                b = (vertex[:, 0] < self.shape[0]).all()
+                c = (0 <= vertex[:, 1]).all()
+                d = (vertex[:, 1] < self.shape[1]).all()
+                return a and b and c and d
+        a = (0 <= vertex[0])
+        b = vertex[0] < self.shape[0]
+        c = (0 <= vertex[1])
+        d = (vertex[1] < self.shape[1])
+        return a and b and c and d
 
     def reescalategraph(self):
         paths = self.graph.wilson()
