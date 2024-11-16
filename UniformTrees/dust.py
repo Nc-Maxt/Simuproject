@@ -60,9 +60,9 @@ class dualgraph:
         # del arbol de raíz
         if len(vertex.shape) > 1:
             for vertice in vertex:
-                self.grid[tuple([np.abs(-vertice[0]+self.shape[0]-1), np.abs(vertice[1]-self.shape[1]+1)])] = 1
+                self.grid[tuple([np.abs(-vertice[0]+self.shape[0]-1), vertice[1]])] = 1
         else:
-            self.grid[tuple([np.abs(-vertex[0]+self.shape[0]-1), np.abs(vertex[1]-self.shape[1]+1)])] = 1
+            self.grid[tuple([np.abs(-vertex[0]+self.shape[0]-1), vertex[1]])] = 1
 
 
     def isVertex(self, vertex):
