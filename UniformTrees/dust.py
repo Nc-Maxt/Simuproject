@@ -32,9 +32,16 @@ class Dualgraph:
         fil, col = shape
         # Se genera el grafo que permita recorrer los elementos
         self.shape = (4*fil+1, 4*col+1)
-        self.grid = np.zeros((4*fil+1, 4*col+1))
+        self.grid = np.zeros(((4*fil+1, 4*col+1)))
         self.graph = g
         self.actives = []
+        self.path = []
+
+    def wilson(self):
+        s = self.graph.wilson()
+        for i in range(len(s)):
+            if i%2 == 1:
+                self.path.append(s[i])
 
     def append(self, vertex):
         """
@@ -47,14 +54,16 @@ class Dualgraph:
             None
         """
         # Verifica que sea un vertice perteneciente al grafo
+        
         assert self.isVertex(vertex)
         # Le cambia el valor a 1 para que sea reconocido como 1 vertice parte
         # del arbol de raíz
         if len(vertex.shape) > 1:
             for vertice in vertex:
-                self.grid[tuple(vertice)] = 1
+                self.grid[tuple([np.abs(-vertice[0]+self.shape[0]-1), vertice[1]])] = 1
         else:
-            self.grid[tuple(vertex)] = 1
+            self.grid[tuple([np.abs(-vertex[0]+self.shape[0]-1), vertex[1]])] = 1
+
 
     def isVertex(self, vertex):
         """
@@ -79,26 +88,56 @@ class Dualgraph:
         d = (vertex[1] < self.shape[1])
         return a and b and c and d
 
-    def reescalategraph(self):
-        paths = self.graph.wilson()
-        count = 0
+    def scalate(self):
+        paths = self.path
         for i in paths:
-            # los pares son los que tienen caminos (no hay ciclos)
-            if (count//2) == 1:
-                # ahora comienza con el reescalamiento
-                a = len(i)
-                b = rescalate(i)
-                for j in range(0, a-1):
-                    first = b[j]
-                    fourth = b[j+1]
-                    movs = (fourth - first)/4
-                    second = first + movs
-                    third = first + 2*movs
+            # ahora comienza con el reescalamiento
+            a = len(i)
+            b = rescalate(i)
+            for j in range(0, a-1):
+                first = b[j]
+                fifth = b[j+1]
+                movs = np.array((fifth - first)/4, dtype=int)
+                second = np.array(first + movs, dtype=int)
+                third = np.array(first + 2*movs, dtype=int)
+                fourth = np.array(first + 3*movs, dtype=int)
+                self.actives.append(first)
+                self.actives.append(second)
+                self.actives.append(third)
+                self.actives.append(fourth)
+                if j == a-2:
+                    self.actives.append(fifth)
+                
+    
+    def gridact(self):
+        for i in self.actives:
+            self.append(i)
 
-                    self.actives.append(first)
-                    self.actives.append(second)
-                    self.actives.append(third)
-                    self.append([first, second, third])
+    def adyacent(self, path):
+        adjacent_vertices = []
+        directions = [
+            np.array([1, 0]),
+            np.array([-1, 0]),
+            np.array([0, 1]),
+            np.array([0, -1]),
+            np.array([1, 1]),
+            np.array([1, -1]),
+            np.array([-1, 1]),
+            np.array([-1, -1]),
+        ]
+        if isinstance(path, np.ndarray):
+            if len(path.shape) > 1:
+                for vertex in path:
+                    for direction in directions:
+                        neighbor = vertex + direction
+                        if self.isVertex(neighbor):
+                            adjacent_vertices.append(neighbor)
+        else:
+            for direction in directions:
+                neighbor = vertex + direction
+                if self.isVertex(neighbor):
+                    adjacent_vertices.append(neighbor)
+        return np.unique(adjacent_vertices, axis=0)
 
     def adyacent(self, path):
         adjacent_vertices = []
