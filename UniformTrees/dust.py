@@ -79,6 +79,7 @@ class dualgraph:
                     self.actives.append(second)
                     self.actives.append(third)
                     self.append([first, second, third])
+            count += 1
 
     """
     def dualed(self):
