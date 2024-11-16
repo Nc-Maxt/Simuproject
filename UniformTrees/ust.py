@@ -253,7 +253,5 @@ class Grafo:
             nocicled = erase_loops(cicled, dired)[0]
             # Se añade sin ciclo al grid
             self.append(nocicled)
-            # Se agrega el camino
-            paseos.append(nocicled)
         # Se retorna
         return paseos
