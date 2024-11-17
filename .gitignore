@@ -6,3 +6,4 @@
 **/__init__.py
 # Ignore python venv environment
 venv/
+anim/animation.mp4
