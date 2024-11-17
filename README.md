@@ -21,3 +21,6 @@ Item II: LSE8
 3.5) animación de grafo dual
 4) unir ambos con mapa de calor
 
+TODO
+- Arreglar rotación al animar usando animSLE
+
