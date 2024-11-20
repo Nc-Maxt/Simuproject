@@ -54,7 +54,7 @@ class Dualgraph:
             None
         """
         # Verifica que sea un vertice perteneciente al grafo
-        
+
         assert self.isVertex(vertex)
         # Le cambia el valor a 1 para que sea reconocido como 1 vertice parte
         # del arbol de raíz
@@ -105,7 +105,7 @@ class Dualgraph:
                 self.actives.append(fourth)
                 if j == a-2:
                     self.actives.append(fifth)
-                
+
     def gridact(self):
         for i in self.actives:
             self.append(i)

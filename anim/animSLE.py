@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import os
 cwd = os.getcwd()
-
+writ = animation.FFMpegWriter(fps=1000)
 
 def animSLE(G, D, A):
     """
@@ -19,9 +19,9 @@ def animSLE(G, D, A):
     G = np.transpose(np.nonzero(G))
     D = np.transpose(np.nonzero(D))
     fig, ax = plt.subplots()
-    ax.plot(G[:, 0], G[:, 1], 'ks', ms=10, label='Spanning Tree')
-    ax.plot(D[:, 0], D[:, 1], 'rs', ms=10, label='Grafo Dual')
-    green_dots, = ax.plot([], [], 'go', lw=8, linestyle='-', label='Curva')
+    ax.plot(G[:, 0], G[:, 1], 'ks', ms=0.2, lw=1, label='Spanning Tree')
+    ax.plot(D[:, 0], D[:, 1], 'rs', ms=0.2, lw=1, label='Grafo Dual')
+    green_dots, = ax.plot([], [], 'go', ms=0.05, lw=1, linestyle='-', label='Curva')
     ax.set_title('Curva $SLE_8$')
 
     def init():
@@ -45,4 +45,4 @@ def animSLE(G, D, A):
 
     # display.display(display.HTML(video))
     # plt.close()
-    ani.save(cwd + '/animSLE.mp4', writer='ffmpeg')
+    ani.save(cwd + '/animSLE2.mp4', writer=writ, dpi=300)
