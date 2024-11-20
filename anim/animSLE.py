@@ -2,7 +2,8 @@ import numpy as np
 
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
-from IPython import display
+import os
+cwd = os.getcwd()
 
 
 def animSLE(G, D, A):
@@ -44,5 +45,4 @@ def animSLE(G, D, A):
 
     # display.display(display.HTML(video))
     # plt.close()
-    ani.save('/home/nacho/simulacion/Simuproject/anim/animation.mp4',
-             writer='ffmpeg')
+    ani.save(cwd + '/animSLE.mp4', writer='ffmpeg')
