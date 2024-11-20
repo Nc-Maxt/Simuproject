@@ -33,72 +33,43 @@ def ordered_scan(arr, set):
         if np.equal(set, arr[i]).all(axis=1).any():
             return arr[i]
 
-
 def erase_loops(visited, dirs):
     """
-    Borra los loops de una caminata aleatoria dada
+    Borra los loops de una caminata aleatoria dada.
 
     Parámetros
     -----------
     visited: numpy.array[int]
-        Caminata como lista de vértices vecinos en el grafo
+        Caminata como lista de vértices vecinos en el grafo.
 
-    dirs:  numpy.array[str]
-        Lista de direcciones tomadas en la realización del
-        camino en el siguiente formato:
-        'u' -> arriba
-        'l' -> izquierda
-        'r' -> derecha
-        'd' -> abajo
+    dirs: numpy.array[str]
+        Lista de direcciones tomadas en la realización del camino.
 
     Retorna
     ----------
-    lerased_visited: numpy.array[int]
-        Caminata creada a partir de visited sin loops
+    loop_erased: numpy.array[int]
+        Caminata sin loops.
 
-    lerased_dirs: numpy.array[str]
-        Lista de direcciones tomadas por el nuevo camino
+    new_dirs: numpy.array[str]
+        Direcciones del camino sin loops.
     """
-    # Inicializa el output
-    loop_erased = np.zeros((len(visited), 2), dtype=int)
-    # Inicializa las direcciones output
-    new_dirs = np.empty(len(dirs), dtype=str)
-    # Indica hasta donde hemos escrito en el output
-    n = 0
-    # Separa los vértices que se repiten
-    vals, counts = np.unique(visited, return_counts=True, axis=0)
-    # Índice del fin del loop borrado en el camino original
-    nf = 0
-    # Índice del inicio del loop borrado en el camino original
-    ni = 0
-    while (counts != 1).any():  # Mientras haya vértice repetido (loop)
-        set = vals[np.argwhere(counts != 1)]
-        # Lista de vértices repetidos
-        set = set.reshape(len(set), 2)
-        # Se busca el primer vértice repetido según el orden del camino
-        # el escaneo comienza desde el fin del ultimo loop borrado
-        repetido = ordered_scan(visited[nf:], set)
-        # Se guarda el fin del loop anterior como offset
-        offset = nf
-        # Se busca el siguiente loop y se asignan ni y nf correspondientemente
-        ni, nf = offset + np.argwhere(
-                             np.logical_and(visited[offset:, 0] == repetido[0],
-                                            visited[offset:, 1] == repetido[1]))[np.array([0, -1]), 0]
-        # Se copia el camino original al output hasta el inicio del loop nuevo
-        loop_erased[n:ni-offset+n] = visited[offset:ni]
-        new_dirs[n:ni-offset+n] = dirs[offset:ni]
-        # Se actualizan para que la siguiente iteración ignore el loop actual
-        n += ni-offset
-        # Se actualiza la busqueda de repetidos ignorando la parte recorrida
-        vals, counts = np.unique(visited[nf:], return_counts=True, axis=0)
-    # l = el resto del camino (ya no hay loops)
-    l = len(visited[nf:])
-    loop_erased[n:l+n] = visited[nf:]
-    if nf == 0:
-        new_dirs[n:l+n] = dirs[nf:]
-    else:
-        new_dirs[n:l+n-1] = dirs[nf:]
-    return loop_erased[0:l+n], new_dirs[0:l+n-1]
+    # Diccionario para almacenar la última posición de cada vértice
+    seen = {}
+    loop_erased = []
+    new_dirs = []
+
+    for i, v in enumerate(visited):
+        vt = tuple(v)  # Convertir el vértice a una tupla (hashable)
+        if vt in seen:
+            # Si el vértice ya fue visitado, borrar el loop
+            loop_start = seen[vt]
+            loop_erased = loop_erased[:loop_start]
+            new_dirs = new_dirs[:loop_start]
+        loop_erased.append(v)
+        if i < len(dirs):  # Asegurarse de no salir del rango
+            new_dirs.append(dirs[i])
+        seen[vt] = len(loop_erased) - 1  # Actualizar índice más reciente
+    return np.array(loop_erased), np.array(new_dirs)
 
 
 class Grafo:
