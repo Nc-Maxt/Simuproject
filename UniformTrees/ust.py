@@ -39,10 +39,10 @@ def erase_loops(visited, dirs):
 
     Parámetros
     -----------
-    visited: numpy.array[int]
-        Caminata como lista de vértices vecinos en el grafo.
+    visited: numpy.ndarray
+        Caminata como lista de vértigices vecinos en el grafo.
 
-    dirs: numpy.array[str]
+    dirs: numpy.ndarray
         Lista de direcciones tomadas en la realización del camino.
 
     Retorna
@@ -65,6 +65,7 @@ def erase_loops(visited, dirs):
             loop_start = seen[vt]
             loop_erased = loop_erased[:loop_start]
             new_dirs = new_dirs[:loop_start]
+            seen = {tuple(v): idx for idx, v in enumerate(loop_erased)}
         loop_erased.append(v)
         if i < len(dirs):  # Asegurarse de no salir del rango
             new_dirs.append(dirs[i])
