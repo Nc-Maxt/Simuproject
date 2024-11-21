@@ -2,6 +2,7 @@ import numpy as np
 
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
+import matplotlib.colors as mcolors
 import os
 cwd = os.getcwd()
 
@@ -16,30 +17,29 @@ def animSLE(G, D, A):
     D (numpy.ndarray): Matrix representing vertices of the dual tree.
     A (list): List of indices indicating the order to update vertices.
     """
-    G = np.transpose(np.nonzero(G))
-    D = np.transpose(np.nonzero(D))
-    fig, ax = plt.subplots()
-    ax.plot(G[:, 0], G[:, 1], 'ks', ms=10, label='Spanning Tree')
-    ax.plot(D[:, 0], D[:, 1], 'rs', ms=10, label='Grafo Dual')
-    green_dots, = ax.plot([], [], 'go', lw=8, linestyle='-', label='Curva')
-    ax.set_title('Curva $SLE_8$')
+    cmap = mcolors.ListedColormap(['white', 'purple', 'green', 'orange'])
+    bounds = [0, 1, 2, 3, 4]
+    norm = mcolors.BoundaryNorm(bounds, cmap.N)
 
-    def init():
-        green_dots.set_data([], [])
-        return green_dots,
+    fig, ax = plt.subplots()
+    im_plot = 2*D + G
+    # ax.plot(G[:, 0], G[:, 1], 'ks', ms=5, label='Spanning Tree')
+    # ax.plot(D[:, 0], D[:, 1], 'rs', ms=5, label='Grafo Dual')
+    # green_dots, = ax.plot([], [], 'go', lw=3, linestyle='-', label='Curva')
+    ax.set_title('Curva $SLE_8$')
+    im = ax.imshow(im_plot, cmap=cmap, norm=norm)
+    # def init():
+    #     green_dots.set_data([], [])
+    #     return green_dots,
 
     def update(frame):
         x, y = A[frame]
-        # x, y = G[idx]
-        xdata = green_dots.get_xdata()
-        ydata = green_dots.get_ydata()
-        xdata.append(x)
-        ydata.append(y)
-        green_dots.set_data(xdata, ydata)
-        return green_dots,
+        im_plot[x, y] = 3
+        im.set_data(im_plot)
+        return [im]
 
     ani = animation.FuncAnimation(
-        fig, update, frames=len(A), init_func=init, blit=True, repeat=False)
+        fig, update, frames=len(A), blit=True, interval=10, repeat=False)
     # ax.legend()
     # video = ani.to_html5_video()
 
